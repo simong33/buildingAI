@@ -11,11 +11,12 @@ def download_and_extract(dep_code=75):
     os.system(f"wget -P raw_data {url}")
     print(f"Extracting data for dep {dep_code}")
     os.system(
-        f"unzip -o raw_data/open_data_millesime_2022-10-d_dep{dep_code}_csv.zip -d raw_data/csv"
+        f"unzip -o raw_data/open_data_millesime_2022-10-d_dep{dep_code}_csv.zip -d raw_data/"
     )
     print(f"Removing zip file for dep {dep_code}")
     os.system(f"rm raw_data/open_data_millesime_2022-10-d_dep{dep_code}_csv.zip")
     remove_extra_files()
+    remove_unrelevant_tables()
 
 
 def remove_unrelevant_tables(table_names=UNRELEVANT_TABLES):
