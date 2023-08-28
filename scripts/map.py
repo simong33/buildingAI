@@ -7,6 +7,9 @@ import os
 
 
 def save_df_to_geojson(df: pd.DataFrame, batch_size=500):
+    """
+    Save a dataframe to a geojson file.
+    """
     if not os.path.exists("raw_data/geojson"):
         os.makedirs("raw_data/geojson")
         df_to_geojson(df, "raw_data/geojson/dpe_initial.geojson", batch_size=batch_size)
