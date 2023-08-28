@@ -11,4 +11,5 @@ UNRELEVANT_TABLES = [
     "geospx",
     "radon",
     "osm_building",
+    "hthd",
 ]
