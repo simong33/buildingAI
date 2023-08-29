@@ -1,6 +1,7 @@
 BDNB_FILES_URI = "https://open-data.s3.fr-par.scw.cloud/bdnb_millesime_2022-10-d/"
 DEP_CODES = [75, 92, 93, 94]
 UNRELEVANT_TABLES = [
+    "batiment_construction",
     "qpv",
     "radon",
     "proprietaire",
