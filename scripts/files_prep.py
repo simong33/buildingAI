@@ -44,3 +44,15 @@ def remove_extra_files():
     Remove CSVT files used in QGIS.
     """
     os.system("rm raw_data/csv/*.csvt")
+
+
+def get_csv_size(path="raw_data/csv"):
+    """
+    Print the total size of the files in the given path.
+    """
+    total_size = 0
+    for dirpath, dirnames, filenames in os.walk(path):
+        for f in filenames:
+            fp = os.path.join(dirpath, f)
+            total_size += os.path.getsize(fp)
+    print(f"Total size of files in {path}: {total_size / 1e6} MB")
