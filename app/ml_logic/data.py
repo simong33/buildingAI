@@ -68,6 +68,7 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
         )
     df = drop_unrelevant_columns(df)
     df = drop_duplicate_columns(df)
+    print(f"FINAL Shape of the dataframe: {df.shape}")
     return df
 
 
@@ -96,6 +97,8 @@ def drop_duplicate_columns(df=None) -> pd.DataFrame:
     """
 
     df = df.drop(columns=DUPLICATE_COLUMNS)
+    columns_to_drop = [col for col in df.columns if "nb_classe_bilan_dpe" in col]
+    df = df.drop(columns=columns_to_drop)
     return df
 
 

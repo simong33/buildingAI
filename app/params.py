@@ -46,10 +46,11 @@ UNRELEVANT_TABLES = [
 ]
 
 COLUMNS_TO_KEEP = {
+    "classe_bilan_dpe": [],
     "annee_construction": ["num", "minmax", "mean_geo"],
     "mat_mur_txt": ["cat", "oeh", "knn_cat"],
     "mat_toit_txt": ["cat", "oeh", "knn_cat"],
-    "nb_log": ["num", "robust", "mean_geo"],
+    "nb_log": ["num", "RobustScaler", "mean_geo"],
     "geom_groupe": [
         "Multypolygon",
         "",
