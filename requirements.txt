@@ -11,3 +11,4 @@ scikit-learn
 shapely
 pyproj
 tqdm
+lazypredict
