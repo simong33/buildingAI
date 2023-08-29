@@ -18,7 +18,8 @@ UNRELEVANT_TABLES = [
     "simulations_dpe",
     "batiment_groupe_dvf",
     "batiment_groupe_dpe",
-    "batiment_groupe_dpe_logtype" "batiment_groupe_dvf_logtype",
+    "batiment_groupe_dpe_logtype",
+    "batiment_groupe_dvf_logtype",
     "batiment_groupe_dvf_open_representatif",
     "batiment_groupe_dvf_open_statistique",
     "batiment_groupe_energie",
@@ -55,3 +56,10 @@ RELEVANT_FILES_THOMAS = [
 ]
 
 COLUMNS_TO_KEEP = ["nb_pdl_res"]
+
+RELEVANT_FILES_ANTONIN= [
+    "batiment_groupe_dpe_representatif_logement",
+    "batiment_groupe_dpe_statistique_logement",
+    "batiment_groupe_ffo_bat",
+    "batiment_groupe_ffo_loc"
+]
