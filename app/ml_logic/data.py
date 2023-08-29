@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 from tqdm import tqdm
-from app.params import COLUMNS_TO_KEEP
+from app.params import COLUMNS_TO_KEEP, DUPLICATE_COLUMNS
 
 
 def save_dataframe():
@@ -67,6 +67,7 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
             f"Warning: the number of rows has changed from {initial_number_of_rows} to {df.shape[0]}."
         )
     df = drop_unrelevant_columns(df)
+    df = drop_duplicate_columns(df)
     return df
 
 
@@ -74,7 +75,7 @@ def drop_unrelevant_columns(df=None) -> pd.DataFrame:
     """
     Drop columns that are not relevant for the analysis.
     """
-    col_to_keep = COLUMNS_TO_KEEP.copy()
+    col_to_keep = list(COLUMNS_TO_KEEP.keys())
     col_to_keep.append("batiment_groupe_id")
     initial_number_of_columns = df.shape[1]
     columns_to_drop = [
@@ -86,6 +87,15 @@ def drop_unrelevant_columns(df=None) -> pd.DataFrame:
         f"Number of columns droped: {number_of_droped_columns} out of {initial_number_of_columns}."
     )
     print(f"Shape of the dataframe: {df.shape}")
+    return df
+
+
+def drop_duplicate_columns(df=None) -> pd.DataFrame:
+    """
+    Final drop of duplicate columns after merge.
+    """
+
+    df = df.drop(columns=DUPLICATE_COLUMNS)
     return df
 
 
