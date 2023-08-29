@@ -67,4 +67,6 @@ dict_ffo_bat = {
     'gaz_conso_tot': ['num','RobustScaler',''],
     'res_conso_tot_par_pdl': ['num','RobustScaler',''],#dle reseaux 8131 lignes, Si on garde le max du couple (id, millesime ): 4852 dont 99% sont de 2021
     'res_conso_tot': ['num','RobustScaler',''],
+    's_geom_groupe' : ['num','RobustScaler','mean avec geom_groupe'] ,
+    'hauteur_mean' : ['num','StandartScaler','mean avec geom_groupe']
 }
