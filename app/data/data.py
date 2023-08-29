@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 from tqdm import tqdm
+from app.params import COLUMNS_TO_KEEP
 
 
 def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
@@ -41,6 +42,26 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
         print(
             f"Warning: the number of rows has changed from {initial_number_of_rows} to {df.shape[0]}."
         )
+    df = drop_unrelevant_columns(df)
+    return df
+
+
+def drop_unrelevant_columns(df=None) -> pd.DataFrame:
+    """
+    Drop columns that are not relevant for the analysis.
+    """
+    col_to_keep = COLUMNS_TO_KEEP.copy()
+    col_to_keep.append("batiment_groupe_id")
+    initial_number_of_columns = df.shape[1]
+    columns_to_drop = [
+        col for col in df.columns if not any(x in col for x in col_to_keep)
+    ]
+    df = df.drop(columns=columns_to_drop)
+    number_of_droped_columns = initial_number_of_columns - df.shape[1]
+    print(
+        f"Number of columns droped: {number_of_droped_columns} out of {initial_number_of_columns}."
+    )
+    print(f"Shape of the dataframe: {df.shape}")
     return df
 
 
