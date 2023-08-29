@@ -33,15 +33,12 @@ def merge_csv_files(dep_codes=DEP_CODES):
     if not os.path.isdir("raw_data/csv"):
         os.system("mkdir raw_data/csv")
 
-    file_names = os.listdir("raw_data/75/csv")
+    file_names = os.listdir("raw_data/93/csv")
     for file_name in file_names:
         print(f"Merging {file_name}")
-        # merge all files with the same name, only keep header from first file
+        # append csv files in a single one, keeping the header only for the first file
         os.system(
-            f"cat raw_data/*/csv/{file_name} | head -n 1 > raw_data/csv/{file_name}"
-        )
-        os.system(
-            f"cat raw_data/*/csv/{file_name} | grep -v 'id' >> raw_data/csv/{file_name}"
+            f"cat raw_data/*/csv/{file_name} | awk 'FNR==1 && NR!=1 {{next}} {{print}}' > raw_data/csv/{file_name}"
         )
 
 
