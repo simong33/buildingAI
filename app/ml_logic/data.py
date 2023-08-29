@@ -52,6 +52,7 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
                 print(f"Merging {fp}")
                 if "multimillesime" in fp:
                     # Keep last millesime for each building
+                    df_tmp["millesime"] = df_tmp["millesime"].astype(str)
                     df_tmp = df_tmp.sort_values(by=["millesime"], ascending=False)
                     df_tmp = df_tmp.drop_duplicates(subset=["batiment_groupe_id"])
                 if "construction" in fp:
