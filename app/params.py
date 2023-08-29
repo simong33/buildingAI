@@ -1,5 +1,21 @@
 BDNB_FILES_URI = "https://open-data.s3.fr-par.scw.cloud/bdnb_millesime_2022-10-d/"
-UNRELEVANT_TABLES_ANTONIN = [
+
+UNRELEVANT_TABLES = [
+    "qpv",
+    "radon",
+    "proprietaire",
+    "iris_simulations_valeur_verte",
+    "local",
+    "local_simulation_dpe",
+    "parcelle_unifiee",
+    "parcelle_unifiee_metrique",
+    "bdnb_version",
+    "synthese_systeme_energetique_logement",
+    "synthese_periode_construction",
+    "synthese_enveloppe",
+    "simulations_valeur_verte",
+    "simulations_dvf",
+    "simulations_dpe",
      "batiment_groupe_dvf",
      "batiment_groupe_dpe",
      "batiment_groupe_dpe_logtype"
@@ -16,4 +32,4 @@ UNRELEVANT_TABLES_ANTONIN = [
      "batiment_groupe_osm_building",
      "batiment_groupe_pie",
      "batiment_groupe_proprietaire"
-]
+RELEVANT_FILES_SIMON = ["batiment_groupe_rnc", "dpe_logement"]
