@@ -1,5 +1,6 @@
 BDNB_FILES_URI = "https://open-data.s3.fr-par.scw.cloud/bdnb_millesime_2022-10-d/"
-UNRELEVANT_TABLES_SIMON = [
+
+UNRELEVANT_TABLES = [
     "qpv",
     "radon",
     "proprietaire",
@@ -15,11 +16,21 @@ UNRELEVANT_TABLES_SIMON = [
     "simulations_valeur_verte",
     "simulations_dvf",
     "simulations_dpe",
-]
-RELEVANT_FILES_SIMON = ["batiment_groupe_rnc", "dpe_logement"]
-UNRELEVANT_TABLES = []
-
-UNRELEVANT_TABLES_THOMAS = [
+    "batiment_groupe_dvf",
+    "batiment_groupe_dpe",
+    "batiment_groupe_dpe_logtype" "batiment_groupe_dvf_logtype",
+    "batiment_groupe_dvf_open_representatif",
+    "batiment_groupe_dvf_open_statistique",
+    "batiment_groupe_energie",
+    "batiment_groupe_enepdl",
+    "batiment_groupe_enethermo",
+    "batiment_groupe_exposition_bruit_logement_social",
+    "batiment_groupe_geospx",
+    "batiment_groupe_hthd",
+    "batiment_groupe_merimee",
+    "batiment_groupe_osm_building",
+    "batiment_groupe_pie",
+    "batiment_groupe_proprietaire",
     "adresse", #sauf si cle_interop_adr nécessaire
     "adresse_metrique",
     "batiment", #inaccessible
@@ -31,6 +42,7 @@ UNRELEVANT_TABLES_THOMAS = [
     "batiment_groupe_dle_gaz_2020",#compris dans dle_gaz_multimillesime
     "batiment_groupe_dle_reseaux_2020"#compris dans dle_reseaux_multimillesime
 ]
+RELEVANT_FILES_SIMON = ["batiment_groupe_rnc", "dpe_logement"]
 
 RELEVANT_FILES_THOMAS= [
     "batiment_construction",# batiment_groupe_id,batiment_construction_id, geometry, alitude, hauteur
@@ -41,3 +53,4 @@ RELEVANT_FILES_THOMAS= [
     "batiment_groupe_dle_gaz_multimillesime",#batiment_groupe_id et données conso
     "batiment_groupe_dle_reseaux_multimillesime"#batiment_groupe_id et données conso
 ]
+
