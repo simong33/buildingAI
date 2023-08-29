@@ -11,4 +11,7 @@ get_csv_size:
 	python -c 'from scripts.files_prep import get_csv_size; get_csv_size()'
 	
 print_dataframe_shape:
-	python -c 'from app.data.data import get_dataframe_shape; get_dataframe_shape()'
+	python -c 'from app.ml_logic.data import get_dataframe_shape; get_dataframe_shape()'
+
+save_dataframe:
+	python -c 'from app.ml_logic.data import save_dataframe; save_dataframe()'

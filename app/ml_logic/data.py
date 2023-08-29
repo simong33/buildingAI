@@ -4,6 +4,30 @@ from tqdm import tqdm
 from app.params import COLUMNS_TO_KEEP
 
 
+def save_dataframe():
+    """
+    Save a dataframe in the data folder.
+    """
+    df = build_dataframe()
+    if not os.path.exists("data"):
+        os.makedirs("data")
+    df.to_csv("data/dpe.csv", index=False)
+
+
+def load_dataframe() -> pd.DataFrame:
+    """
+    Load a dataframe from the data folder.
+    """
+    if not os.path.exists("data"):
+        os.makedirs("data")
+    if os.path.exists("data/dpe.csv"):
+        df = pd.read_csv("data/dpe.csv")
+    else:
+        df = build_dataframe()
+        df.to_csv("data/dpe.csv", index=False)
+    return df
+
+
 def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
     """
     Build a dataframe from the CSV files in raw_data/csv.
