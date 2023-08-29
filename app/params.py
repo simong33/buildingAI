@@ -55,7 +55,19 @@ RELEVANT_FILES_THOMAS = [
     "batiment_groupe_dle_reseaux_multimillesime",  # batiment_groupe_id et données conso
 ]
 
-COLUMNS_TO_KEEP = ["nb_pdl_res"]
+COLUMNS_TO_KEEP = {
+    'annee_construction':['num','minmax','mean_geo'],
+    'mat_mur_txt':['cat','oeh','knn_cat'],
+    'mat_toit_txt':['cat','oeh','knn_cat'],
+    'nb_log':['num','robust','mean_geo'],
+    'geom_groupe' : ['Multypolygon','',''], #batiment group 70k lignes 1.3%de null sur paris
+    'elec_conso_tot_par_pdl': ['num','RobustScaler',''], #dle_elec 207653 lignes, Si on garde le max du couple (id, millesime ): 52976 dont 98% sont de 2021
+    'elec_conso_tot': ['num','RobustScaler',''],
+    'gaz_conso_tot_par_pdl': ['num','RobustScaler',''],#dle_gaz 55178 lignes, Si on garde le max du couple (id, millesime ): 19825 dont 89% sont de 2021
+    'gaz_conso_tot': ['num','RobustScaler',''],
+    'res_conso_tot_par_pdl': ['num','RobustScaler',''],#dle reseaux 8131 lignes, Si on garde le max du couple (id, millesime ): 4852 dont 99% sont de 2021
+    'res_conso_tot': ['num','RobustScaler',''],
+}
 
 RELEVANT_FILES_ANTONIN= [
     "batiment_groupe_dpe_representatif_logement",
