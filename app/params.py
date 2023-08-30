@@ -5,11 +5,11 @@ CITY_CODES = [
     132,  # Marseille arr.
     6938,  # Lyon arr.
     31555,
-    # 33063,
+    33063,
     34172,
     44109,
-    # 59350,
-    # 67482,
+    59350,
+    67482,
     751,  # Paris prefix of arrondissements
 ]
 UNRELEVANT_TABLES = [
