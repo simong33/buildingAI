@@ -15,7 +15,7 @@ def classic_clean(df:pd.DataFrame,)->pd.DataFrame:
 
     return clean_data
 
-def create_preprocessor()->ColumnTransformer:
+def create_preprocessor(df:pd.DataFrame)->ColumnTransformer:
     """
     Cette fonction permet de créer un preprocessor qui intègre les dfférentes catégories de columns
     """
@@ -33,14 +33,22 @@ def create_preprocessor()->ColumnTransformer:
     #NUM - Robuts
     selection = (mapping.type=='num'& mapping.scale=='robust')
     cols_num_r = list(mapping[selection].index)
+    cols_num_r = [
+    col for col in df.columns
+    if col in cols_num_r or len([c for c in cols_num_r if c in col])>0
+    ]
     r_scale = RobustScaler()
     num_robust_pipe = make_pipeline(num_imputer,r_scale)
-
 
 
     #NUM - MinMax
     selection = (mapping.type=='num'& mapping.scale=='minmax')
     cols_num_mm = list(mapping[selection].index)
+    cols_num_mm = [
+        col for col in df.columns
+        if col in cols_num_mm or len([c for c in cols_num_mm if c in col])>0
+        ]
+
     mm_scale = MinMaxScaler()
     num_minmax_pipe = make_pipeline(num_imputer,
                                     mm_scale
@@ -79,10 +87,11 @@ def preprocess(df: pd.DataFrame, split_ratio:float)-> tuple:
     """
     #On nettoie la données
     df_clean = classic_clean(df)
+    target_col = 'classe_bilan_dpe'
 
     #On définit les features et la target
-    X = df_clean.drop(columns='class_bilan_dpe')
-    y = df_clean['class_bilan_dpe']
+    X = df_clean.drop(columns=target_col)
+    y = df_clean[target_col]
 
     #On transforme les features et la target
     #----------------------------------------------
