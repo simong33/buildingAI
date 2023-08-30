@@ -73,7 +73,7 @@ def create_preprocessor(df:pd.DataFrame)->ColumnTransformer:
 
     selection = (mapping.type=='cat')
     cols_cat = list(mapping[selection].index)
-    ohe = OneHotEncoder()
+    ohe = OneHotEncoder(sparse_output=False)
     cat_pipe = make_pipeline(str_imputer,
                              ohe
                              )
@@ -124,12 +124,15 @@ def preprocess(df: pd.DataFrame, split_ratio:float)-> tuple:
     preprocessor = create_preprocessor(df=X)
 
     #On split la donnée Train vs Test
-    X_train, y_train, X_test, y_test = train_test_split(X,y_encoded,test_size=split_ratio)
+    X_train, X_test, y_train, y_test = train_test_split(X,
+                                                        y_encoded,
+                                                        test_size=split_ratio)
 
     #On transforme les features
     preprocessor.fit(X_train)
 
     X_train_preproc = preprocessor.transform(X_train)
+    breakpoint()
     X_test_preproc = preprocessor.transform(X_test)
 
-    return X_train_preproc, y_train, X_test_preproc, y_test
+    return X_train_preproc, X_test_preproc, y_train, y_test
