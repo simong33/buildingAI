@@ -74,4 +74,5 @@ DUPLICATE_COLUMNS = [
     "annee_construction_dpe",
     "dpe_logement_annee_construction_dpe",
     "l_annee_construction",
+    "batiment_groupe_rnc_nb_log",
 ]
