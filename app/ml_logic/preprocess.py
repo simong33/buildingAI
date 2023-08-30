@@ -87,7 +87,7 @@ def create_preprocessor(df:pd.DataFrame)->ColumnTransformer:
             ('categorical_cols',cat_pipe,cols_cat)
         ],
         n_jobs=-1,
-        remainder='passthrough'
+        remainder='drop'
     )
 
     return final_preprocessor
@@ -132,7 +132,8 @@ def preprocess(df: pd.DataFrame, split_ratio:float)-> tuple:
     preprocessor.fit(X_train)
 
     X_train_preproc = preprocessor.transform(X_train)
-    breakpoint()
     X_test_preproc = preprocessor.transform(X_test)
+
+    print(preprocessor.get_feature_names_out())
 
     return X_train_preproc, X_test_preproc, y_train, y_test
