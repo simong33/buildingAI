@@ -15,6 +15,30 @@ def classic_clean(df:pd.DataFrame,)->pd.DataFrame:
 
     return clean_data
 
+def gen_pipe(df:pd.DataFrame,mapping:pd.DataFrame,scaler:str):
+
+    num_imputer = SimpleImputer(strategy='mean')
+
+    selection = (mapping.type=='num') & (mapping.scale==scaler)
+
+    cols = list(mapping[selection].index)
+    cols = [
+    col for col in df.columns
+    if col in cols or len([c for c in cols if c in col])>0
+    ]
+
+    match scaler :
+        case 'RobustScaler':
+            scaler = RobustScaler()
+        case 'StandardScaler':
+            scaler = RobustScaler()
+        case _:
+            scaler = MinMaxScaler()
+
+    num_pipe = make_pipeline(num_imputer,scaler)
+
+    return num_pipe, cols
+
 def create_preprocessor(df:pd.DataFrame)->ColumnTransformer:
     """
     Cette fonction permet de créer un preprocessor qui intègre les dfférentes catégories de columns
@@ -28,49 +52,25 @@ def create_preprocessor(df:pd.DataFrame)->ColumnTransformer:
                                               'impute'
                                               ]
                                      )
-    #On prépare les imputers
-    str_imputer = SimpleImputer(strategy='constant',fill_value='INDETERMINE')
-    num_imputer = SimpleImputer(strategy='mean')
 
     #On définit les différent pipelines
     #Pour le moment quatre pipelines : num + ordinal + categorical
 
     #NUM - Robuts
-    selection = (mapping.type=='num') & (mapping.scale=='RobustScaler')
-    cols_num_r = list(mapping[selection].index)
-    cols_num_r = [
-    col for col in df.columns
-    if col in cols_num_r or len([c for c in cols_num_r if c in col])>0
-    ]
-    r_scale = RobustScaler()
-    num_robust_pipe = make_pipeline(num_imputer,r_scale)
-
+    num_robust_pipe,cols_num_r = gen_pipe(df,mapping,'RobustScaler')
 
     #NUM - MinMax
-    selection = (mapping.type=='num') & (mapping.scale=='MinMaxScaler')
-    cols_num_mm = list(mapping[selection].index)
-    cols_num_mm = [
-        col for col in df.columns
-        if col in cols_num_mm or len([c for c in cols_num_mm if c in col])>0
-        ]
-    mm_scale = MinMaxScaler()
-    num_minmax_pipe = make_pipeline(num_imputer,mm_scale)
+    num_minmax_pipe,cols_num_mm = gen_pipe(df,mapping,'MinMaxScaler')
 
     #NUM - Standard
-    selection = (mapping.type=='num') & (mapping.scale=='StandardScaler')
-    cols_num_std = list(mapping[selection].index)
-    cols_num_std = [
-        col for col in df.columns
-        if col in cols_num_std or len([c for c in cols_num_std if c in col])>0
-        ]
+    num_standard_pipe,cols_num_std = gen_pipe(df,mapping,'StandardScaler')
 
-
-    std_scale = StandardScaler()
-    num_standard_pipe = make_pipeline(num_imputer,
-                                    std_scale
-                                    )
 
     #CAT
+    #On prépare les imputers
+    str_imputer = SimpleImputer(strategy='constant',
+                                fill_value='INDETERMINE')
+
     selection = (mapping.type=='cat')
     cols_cat = list(mapping[selection].index)
     ohe = OneHotEncoder()
