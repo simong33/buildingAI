@@ -1,6 +1,6 @@
 import pandas as pd
 
-from sklearn.preprocessing import RobustScaler, MinMaxScaler,LabelEncoder,OneHotEncoder
+from sklearn.preprocessing import RobustScaler, StandardScaler, MinMaxScaler,LabelEncoder,OneHotEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import make_pipeline
 from sklearn.compose import ColumnTransformer
@@ -21,8 +21,13 @@ def create_preprocessor(df:pd.DataFrame)->ColumnTransformer:
     """
 
     #Mapping columns
-    mapping = pd.DataFrame.from_dict(COLUMNS_TO_KEEP,columns=['type','scale','impute'])
-
+    mapping = pd.DataFrame.from_dict(COLUMNS_TO_KEEP,
+                                     orient='index',
+                                     columns=['type',
+                                              'scale',
+                                              'impute'
+                                              ]
+                                     )
     #On prépare les imputers
     str_imputer = SimpleImputer(strategy='constant',fill_value='INDETERMINE')
     num_imputer = SimpleImputer(strategy='mean')
@@ -31,7 +36,7 @@ def create_preprocessor(df:pd.DataFrame)->ColumnTransformer:
     #Pour le moment quatre pipelines : num + ordinal + categorical
 
     #NUM - Robuts
-    selection = (mapping.type=='num'& mapping.scale=='robust')
+    selection = (mapping.type=='num') & (mapping.scale=='RobustScaler')
     cols_num_r = list(mapping[selection].index)
     cols_num_r = [
     col for col in df.columns
@@ -42,16 +47,27 @@ def create_preprocessor(df:pd.DataFrame)->ColumnTransformer:
 
 
     #NUM - MinMax
-    selection = (mapping.type=='num'& mapping.scale=='minmax')
+    selection = (mapping.type=='num') & (mapping.scale=='MinMaxScaler')
     cols_num_mm = list(mapping[selection].index)
     cols_num_mm = [
         col for col in df.columns
         if col in cols_num_mm or len([c for c in cols_num_mm if c in col])>0
         ]
-
     mm_scale = MinMaxScaler()
-    num_minmax_pipe = make_pipeline(num_imputer,
-                                    mm_scale
+    num_minmax_pipe = make_pipeline(num_imputer,mm_scale)
+
+    #NUM - Standard
+    selection = (mapping.type=='num') & (mapping.scale=='StandardScaler')
+    cols_num_std = list(mapping[selection].index)
+    cols_num_std = [
+        col for col in df.columns
+        if col in cols_num_std or len([c for c in cols_num_std if c in col])>0
+        ]
+
+
+    std_scale = StandardScaler()
+    num_standard_pipe = make_pipeline(num_imputer,
+                                    std_scale
                                     )
 
     #CAT
@@ -67,6 +83,7 @@ def create_preprocessor(df:pd.DataFrame)->ColumnTransformer:
         [
             ('numerical_cols_r',num_robust_pipe,cols_num_r),
             ('numerical_cols_mm',num_minmax_pipe,cols_num_mm),
+            ('numerical_cols_std',num_standard_pipe,cols_num_std),
             ('categorical_cols',cat_pipe,cols_cat)
         ],
         n_jobs=-1,
