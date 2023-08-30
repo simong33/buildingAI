@@ -4,15 +4,16 @@ CITY_CODES = [
     "06088",
     132,  # Marseille arr.
     6938,  # Lyon arr.
-    #31555,
-    # 33063,
-    #34172,
-    #44109,
-    # 59350,
-    # 67482,
+    31555,
+    33063,
+    34172,
+    44109,
+    59350,
+    67482,
     751,  # Paris prefix of arrondissements
 ]
 UNRELEVANT_TABLES = [
+    "dpe_logement",
     "batiment_groupe_dle_reseaux_multimillesime",
     "batiment_construction",
     "qpv",
@@ -115,7 +116,6 @@ COLUMNS_TO_KEEP = {
 DUPLICATE_COLUMNS = [
     "contient_fictive_geom_groupe",
     "annee_construction_dpe",
-    "dpe_logement_annee_construction_dpe",
     "l_annee_construction",
     "batiment_groupe_rnc_nb_log",
 ]
