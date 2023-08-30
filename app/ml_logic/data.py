@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 from tqdm import tqdm
-from app.params import COLUMNS_TO_KEEP
+from app.params import COLUMNS_TO_KEEP, DUPLICATE_COLUMNS
 
 
 def save_dataframe():
@@ -52,6 +52,7 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
                 print(f"Merging {fp}")
                 if "multimillesime" in fp:
                     # Keep last millesime for each building
+                    df_tmp["millesime"] = df_tmp["millesime"].astype(str)
                     df_tmp = df_tmp.sort_values(by=["millesime"], ascending=False)
                     df_tmp = df_tmp.drop_duplicates(subset=["batiment_groupe_id"])
                 if "construction" in fp:
@@ -67,6 +68,11 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
             f"Warning: the number of rows has changed from {initial_number_of_rows} to {df.shape[0]}."
         )
     df = drop_unrelevant_columns(df)
+    df = drop_duplicate_columns(df)
+    df = rename_columns(df)
+    df = remove_duplicate_headers(df)
+    df = force_types(df)
+    print(f"FINAL Shape of the dataframe: {df.shape}")
     return df
 
 
@@ -74,7 +80,7 @@ def drop_unrelevant_columns(df=None) -> pd.DataFrame:
     """
     Drop columns that are not relevant for the analysis.
     """
-    col_to_keep = COLUMNS_TO_KEEP.copy()
+    col_to_keep = list(COLUMNS_TO_KEEP.keys())
     col_to_keep.append("batiment_groupe_id")
     initial_number_of_columns = df.shape[1]
     columns_to_drop = [
@@ -86,6 +92,17 @@ def drop_unrelevant_columns(df=None) -> pd.DataFrame:
         f"Number of columns droped: {number_of_droped_columns} out of {initial_number_of_columns}."
     )
     print(f"Shape of the dataframe: {df.shape}")
+    return df
+
+
+def drop_duplicate_columns(df=None) -> pd.DataFrame:
+    """
+    Final drop of duplicate columns after merge.
+    """
+
+    df = df.drop(columns=DUPLICATE_COLUMNS)
+    columns_to_drop = [col for col in df.columns if "nb_classe_bilan_dpe" in col]
+    df = df.drop(columns=columns_to_drop)
     return df
 
 
@@ -112,6 +129,19 @@ def craft_unique_column_names(
     return df2
 
 
+def rename_columns(df=None) -> pd.DataFrame:
+    """
+    Rename columns for multimillesime.
+    """
+    col = {
+        "conso_tot": "gaz_conso_tot",
+        "conso_tot_par_pdl": "gaz_conso_tot_par_pdl",
+        "batiment_groupe_dle_elec_multimillesime_conso_tot": "elec_conso_tot",
+        "batiment_groupe_dle_elec_multimillesime_conso_tot_par_pdl": "elec_conso_tot_par_pdl",
+    }
+    return df.rename(columns=col)
+
+
 def merge_df_with_rel_table(df1, df2, fp) -> pd.DataFrame:
     """
     Use the join table to merge the two tables.
@@ -134,3 +164,35 @@ def merge_df_with_rel_table(df1, df2, fp) -> pd.DataFrame:
     df = df.merge(df2, on=f"{table_name}_id", how="left")
     print("Shape of the joined dataframe: ", df.shape)
     return df
+
+
+def remove_duplicate_headers(df) -> pd.DataFrame:
+    """
+    Remove duplicate headers if necessary
+    """
+    dup = df.query('batiment_groupe_id=="batiment_groupe_id"').index
+    df = df.drop(dup.tolist())
+    return df
+
+
+def force_types(df) -> pd.DataFrame:
+    """
+    Force types of columns
+    """
+    dict_type = {
+        "geom_groupe": object,
+        "batiment_groupe_id": str,
+        "s_geom_groupe": float,
+        "gaz_conso_tot": float,
+        "gaz_conso_tot_par_pdl": float,
+        "hauteur_mean": float,
+        "annee_construction": float,
+        "mat_mur_txt": str,
+        "mat_toit_txt": str,
+        "nb_log": float,
+        "classe_bilan_dpe": str,
+        "dpe_logement_classe_bilan_dpe": str,
+        "elec_conso_tot": float,
+        "elec_conso_tot_par_pdl": float,
+    }
+    return df.astype(dict_type)
