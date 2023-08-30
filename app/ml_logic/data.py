@@ -134,8 +134,6 @@ def rename_columns(df=None) -> pd.DataFrame:
     col = {
         "conso_tot": "gaz_conso_tot",
         "conso_tot_par_pdl": "gaz_conso_tot_par_pdl",
-        "batiment_groupe_dle_reseaux_multimillesime_conso_tot": "res_conso_tot",
-        "batiment_groupe_dle_reseaux_multimillesime_conso_tot_par_pdl": "res_conso_tot_par_pdl",
         "batiment_groupe_dle_elec_multimillesime_conso_tot": "elec_conso_tot",
         "batiment_groupe_dle_elec_multimillesime_conso_tot_par_pdl": "elec_conso_tot_par_pdl",
     }

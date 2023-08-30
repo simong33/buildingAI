@@ -1,13 +1,16 @@
 import os
+import pandas as pd
 from app.params import *
 
 
-def download_and_extract(dep_codes: list = DEP_CODES):
+def download_and_extract():
     """
     Download and extract the data from the BDNB.
     """
+    dep_codes = extract_dep_codes_from_cities()
     clean_raw_data()
     for dep_code in dep_codes:
+        print(f"Downloading data for dep {dep_code}")
         url = craft_download_url(dep_code)
         print(f"Downloading data from {url}")
         os.system(f"wget -P raw_data {url}")
@@ -21,9 +24,36 @@ def download_and_extract(dep_codes: list = DEP_CODES):
         os.system(f"rm raw_data/open_data_millesime_2022-10-d_dep{dep_code}_csv.zip")
         remove_extra_files(dep_code)
         remove_unrelevant_tables(UNRELEVANT_TABLES, dep_code)
+        keep_top_cities(dep_code)
     merge_csv_files(dep_codes)
     remove_departements_directories(dep_codes)
     get_csv_size()
+
+
+def keep_top_cities(dep_code: int):
+    """
+    Only keep buildings in cities relevant for our analysis.
+    """
+    file_names = os.listdir(f"raw_data/{dep_code}/csv")
+    city_codes = [
+        str(city_code)
+        for city_code in CITY_CODES
+        if str(city_code)[:2] == str(dep_code)
+    ]
+    print(f"Keeping only top cities for {dep_code}")
+    for file_name in file_names:
+        tmp_df = pd.read_csv(f"raw_data/{dep_code}/csv/{file_name}", sep=",")
+        if "batiment_groupe_id" in tmp_df.columns:
+            print(f"Number of rows in {file_name} BEFORE filtering: {tmp_df.shape[0]}")
+            # filter rows where batiment_groupe_id starts with one of the city codes or "uf_{city_code}"
+            tmp_df = tmp_df[
+                tmp_df["batiment_groupe_id"].str.startswith(tuple(city_codes))
+                | tmp_df["batiment_groupe_id"].str.startswith(
+                    tuple([f"uf_{city_code}" for city_code in city_codes])
+                )
+            ]
+            print(f"Number of rows in {file_name} AFTER filtering: {tmp_df.shape[0]}")
+            tmp_df.to_csv(f"raw_data/{dep_code}/csv/{file_name}", index=False)
 
 
 def merge_csv_files(dep_codes=DEP_CODES):
@@ -33,10 +63,9 @@ def merge_csv_files(dep_codes=DEP_CODES):
     if not os.path.isdir("raw_data/csv"):
         os.system("mkdir raw_data/csv")
 
-    file_names = os.listdir("raw_data/93/csv")
+    file_names = os.listdir("raw_data/69/csv")
     for file_name in file_names:
         print(f"Merging {file_name}")
-        # append csv files in a single one, keeping the header only for the first file
         os.system(
             f"cat raw_data/*/csv/{file_name} | awk 'FNR==1 && NR!=1 {{next}} {{print}}' > raw_data/csv/{file_name}"
         )
@@ -99,3 +128,11 @@ def get_csv_size(path="raw_data/csv"):
             fp = os.path.join(dirpath, f)
             total_size += os.path.getsize(fp)
     print(f"Total size of files in {path}: {total_size / 1e6} MB")
+
+
+def extract_dep_codes_from_cities() -> list:
+    """
+    Extract the departement codes from the city codes.
+    """
+    city_codes = [str(city_code) for city_code in CITY_CODES]
+    return list(set([city_code[:2] for city_code in city_codes]))
