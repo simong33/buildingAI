@@ -107,7 +107,7 @@ def preprocess(df: pd.DataFrame, split_ratio:float)-> tuple:
     target_col = 'classe_bilan_dpe'
 
     #On définit les features et la target
-    X = df_clean.drop(columns=[target_col, 'geom_groupe'])
+    X = df_clean.drop(columns=[target_col, 'geom_groupe','batiment_group_id'])
     y = df_clean[target_col]
 
     #On transforme les features et la target
