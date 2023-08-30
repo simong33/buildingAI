@@ -69,6 +69,7 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
         )
     df = drop_unrelevant_columns(df)
     df = drop_duplicate_columns(df)
+    df = rename_columns(df)
     print(f"FINAL Shape of the dataframe: {df.shape}")
     return df
 
@@ -124,6 +125,21 @@ def craft_unique_column_names(
         if col_name in df1.columns and col_name not in exceptions:
             df2 = df2.rename(columns={col_name: f"{prefix}_{col_name}"})
     return df2
+
+
+def rename_columns(df=None) -> pd.DataFrame:
+    """
+    Rename columns for multimillesime.
+    """
+    col = {
+        "conso_tot": "gaz_conso_tot",
+        "conso_tot_par_pdl": "gaz_conso_tot_par_pdl",
+        "batiment_groupe_dle_reseaux_multimillesime_conso_tot": "res_conso_tot",
+        "batiment_groupe_dle_reseaux_multimillesime_conso_tot_par_pdl": "res_conso_tot_par_pdl",
+        "batiment_groupe_dle_elec_multimillesime_conso_tot": "elec_conso_tot",
+        "batiment_groupe_dle_elec_multimillesime_conso_tot_par_pdl": "elec_conso_tot_par_pdl",
+    }
+    return df.rename(columns=col)
 
 
 def merge_df_with_rel_table(df1, df2, fp) -> pd.DataFrame:
