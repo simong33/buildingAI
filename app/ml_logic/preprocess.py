@@ -13,6 +13,13 @@ def classic_clean(df:pd.DataFrame,)->pd.DataFrame:
     #On retire les ligne duppliquées
     clean_data = data.drop_duplicates()
 
+    #On retire les lignes qui ne correspondent pas à des données résidentielles
+    #On utilise la colonne de bdtopo l_usage_1
+    selection = clean_data.apply(lambda row: ((row[0]=='Résidentiel')
+                                 or (len(row)==2)and(row[1]=='Résidentiel'))*1,
+                                 axis=1)==1
+    clean_data=clean_data[selection]
+
     return clean_data
 
 def gen_pipe(df:pd.DataFrame,mapping:pd.DataFrame,scaler:str):
@@ -92,7 +99,7 @@ def create_preprocessor(df:pd.DataFrame)->ColumnTransformer:
 
     return final_preprocessor
 
-def preprocess(df: pd.DataFrame, split_ratio:float)-> tuple:
+def preprocess(df: pd.DataFrame, split_ratio:float=0.2)-> tuple:
     """
     Input : dataframe
     Output : tuple X_train, y_train, X_test, y_test
