@@ -70,7 +70,7 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
     df = drop_unrelevant_columns(df)
     df = drop_duplicate_columns(df)
     df = rename_columns(df)
-    df = supp_str_df(df)
+    df = remove_duplicate_headers(df)
     df = force_types(df)
     print(f"FINAL Shape of the dataframe: {df.shape}")
     return df
@@ -166,7 +166,7 @@ def merge_df_with_rel_table(df1, df2, fp) -> pd.DataFrame:
     return df
 
 
-def supp_str_df(df) -> pd.DataFrame:
+def remove_duplicate_headers(df) -> pd.DataFrame:
     """
     Remove duplicate headers if necessary
     """
