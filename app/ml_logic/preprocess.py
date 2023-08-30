@@ -104,7 +104,7 @@ def preprocess(df: pd.DataFrame, split_ratio:float)-> tuple:
     #features
     #----------------------------------------------
     #On instancie le preprocessor
-    preprocessor = create_preprocessor()
+    preprocessor = create_preprocessor(df=X)
 
     #On split la donnée Train vs Test
     X_train, y_train, X_test, y_test = train_test_split(X,y_encoded,test_size=split_ratio)
