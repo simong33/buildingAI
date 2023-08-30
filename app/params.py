@@ -82,7 +82,6 @@ COLUMNS_TO_KEEP = {
     "hauteur_mean": ["num", "StandartScaler", "mean avec geom_groupe"],
 }
 
-<<<<<<< HEAD
 RELEVANT_FILES_ANTONIN= [
     "batiment_groupe_dpe_representatif_logement",
     "batiment_groupe_dpe_statistique_logement",
@@ -113,7 +112,6 @@ COLUMNS_TO_KEEP = {
     # 'res_conso_tot': ['num','RobustScaler',''],
     "hauteur_mean": ["num", "StandartScaler", "mean avec geom_groupe"],
 }
-=======
 DUPLICATE_COLUMNS = [
     "contient_fictive_geom_groupe",
     "annee_construction_dpe",
@@ -121,4 +119,3 @@ DUPLICATE_COLUMNS = [
     "l_annee_construction",
     "batiment_groupe_rnc_nb_log",
 ]
->>>>>>> master
