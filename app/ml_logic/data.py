@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import os
 from tqdm import tqdm
 from app.params import COLUMNS_TO_KEEP, DUPLICATE_COLUMNS
@@ -72,6 +73,7 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
     df = rename_columns(df)
     df = remove_duplicate_headers(df)
     df = force_types(df)
+    df = drop_rows_without_target(df)
     print(f"FINAL Shape of the dataframe: {df.shape}")
     return df
 
@@ -103,6 +105,19 @@ def drop_duplicate_columns(df=None) -> pd.DataFrame:
     df = df.drop(columns=DUPLICATE_COLUMNS)
     columns_to_drop = [col for col in df.columns if "nb_classe_bilan_dpe" in col]
     df = df.drop(columns=columns_to_drop)
+    return df
+
+
+def drop_rows_without_target(df=None) -> pd.DataFrame:
+    """
+    Remove rows without DPE target.
+    """
+    print("Removing rows without DPE target.")
+    df.loc[
+        ~df["classe_bilan_dpe"].isin(["A", "B", "C", "D", "E", "F", "G"]),
+        "classe_bilan_dpe",
+    ] = np.nan
+    df = df.dropna(subset=["classe_bilan_dpe"])
     return df
 
 
@@ -191,7 +206,6 @@ def force_types(df) -> pd.DataFrame:
         "mat_toit_txt": str,
         "nb_log": float,
         "classe_bilan_dpe": str,
-        "dpe_logement_classe_bilan_dpe": str,
         "elec_conso_tot": float,
         "elec_conso_tot_par_pdl": float,
     }
