@@ -62,7 +62,7 @@ def merge_csv_files(dep_codes=DEP_CODES):
     if not os.path.isdir("raw_data/csv"):
         os.system("mkdir raw_data/csv")
 
-    file_names = os.listdir("raw_data/69/csv")
+    file_names = os.listdir("raw_data/75/csv")
     for file_name in file_names:
         print(f"Merging {file_name}")
         os.system(
