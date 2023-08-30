@@ -70,6 +70,8 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
     df = drop_unrelevant_columns(df)
     df = drop_duplicate_columns(df)
     df = rename_columns(df)
+    df = remove_duplicate_headers(df)
+    df = force_types(df)
     print(f"FINAL Shape of the dataframe: {df.shape}")
     return df
 
@@ -162,3 +164,35 @@ def merge_df_with_rel_table(df1, df2, fp) -> pd.DataFrame:
     df = df.merge(df2, on=f"{table_name}_id", how="left")
     print("Shape of the joined dataframe: ", df.shape)
     return df
+
+
+def remove_duplicate_headers(df) -> pd.DataFrame:
+    """
+    Remove duplicate headers if necessary
+    """
+    dup = df.query('batiment_groupe_id=="batiment_groupe_id"').index
+    df = df.drop(dup.tolist())
+    return df
+
+
+def force_types(df) -> pd.DataFrame:
+    """
+    Force types of columns
+    """
+    dict_type = {
+        "geom_groupe": object,
+        "batiment_groupe_id": str,
+        "s_geom_groupe": float,
+        "gaz_conso_tot": float,
+        "gaz_conso_tot_par_pdl": float,
+        "hauteur_mean": float,
+        "annee_construction": float,
+        "mat_mur_txt": str,
+        "mat_toit_txt": str,
+        "nb_log": float,
+        "classe_bilan_dpe": str,
+        "dpe_logement_classe_bilan_dpe": str,
+        "elec_conso_tot": float,
+        "elec_conso_tot_par_pdl": float,
+    }
+    return df.astype(dict_type)
