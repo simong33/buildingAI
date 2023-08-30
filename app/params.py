@@ -1,6 +1,19 @@
 BDNB_FILES_URI = "https://open-data.s3.fr-par.scw.cloud/bdnb_millesime_2022-10-d/"
-DEP_CODES = [75, 92, 93, 94]
+DEP_CODES = [69]
+CITY_CODES = [
+    "06088",
+    132,  # Marseille arr.
+    6938,  # Lyon arr.
+    31555,
+    # 33063,
+    34172,
+    44109,
+    # 59350,
+    # 67482,
+    751,  # Paris prefix of arrondissements
+]
 UNRELEVANT_TABLES = [
+    "batiment_groupe_dle_reseaux_multimillesime",
     "batiment_construction",
     "qpv",
     "radon",
