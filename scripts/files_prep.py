@@ -45,7 +45,6 @@ def keep_top_cities(dep_code: int):
         tmp_df = pd.read_csv(f"raw_data/{dep_code}/csv/{file_name}", sep=",")
         if "batiment_groupe_id" in tmp_df.columns:
             print(f"Number of rows in {file_name} BEFORE filtering: {tmp_df.shape[0]}")
-            # filter rows where batiment_groupe_id starts with one of the city codes or "uf_{city_code}"
             tmp_df = tmp_df[
                 tmp_df["batiment_groupe_id"].str.startswith(tuple(city_codes))
                 | tmp_df["batiment_groupe_id"].str.startswith(
