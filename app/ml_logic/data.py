@@ -2,9 +2,8 @@ import pandas as pd
 import numpy as np
 import os
 from tqdm import tqdm
-from app.params import COLUMNS_TO_KEEP, DUPLICATE_COLUMNS, LOCAL_DATA_PATH
 from colorama import Fore, Style
-from params import *
+from app.params import *
 from google.cloud import bigquery
 
 def load_data_to_bq(
