@@ -15,3 +15,6 @@ print_dataframe_shape:
 
 save_dataframe:
 	python -c 'from app.ml_logic.data import save_dataframe; save_dataframe()'
+
+run_api:
+	uvicorn app.api.fast:app

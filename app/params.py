@@ -1,4 +1,13 @@
+import os
+
+LOCAL_DATA_PATH = os.path.join(os.path.expanduser("~"), ".lewagon", "mlops", "data")
+LOCAL_REGISTRY_PATH = os.path.join(
+    os.path.expanduser("~"), ".lewagon", "mlops", "training_outputs"
+)
+BUCKET_NAME = os.environ.get("BUCKET_NAME")
+MODEL_TARGET = "gcs"  # "local" or "gcs"
 BDNB_FILES_URI = "https://open-data.s3.fr-par.scw.cloud/bdnb_millesime_2022-10-d/"
+
 DEP_CODES = [69]
 CITY_CODES = [
     "06088",
@@ -83,15 +92,15 @@ COLUMNS_TO_KEEP = {
     "hauteur_mean": ["num", "StandartScaler", "mean avec geom_groupe"],
 }
 
-RELEVANT_FILES_ANTONIN= [
+RELEVANT_FILES_ANTONIN = [
     "batiment_groupe_dpe_representatif_logement",
     "batiment_groupe_dpe_statistique_logement",
     "batiment_groupe_ffo_bat",
-    "batiment_groupe_ffo_loc"
+    "batiment_groupe_ffo_loc",
 ]
 
 COLUMNS_TO_KEEP = {
-    "classe_bilan_dpe": ['ord','oe',''],
+    "classe_bilan_dpe": ["ord", "oe", ""],
     "annee_construction": ["num", "MinMaxScaler", "mean_geo"],
     "mat_mur_txt": ["cat", "oeh", "knn_cat"],
     "mat_toit_txt": ["cat", "oeh", "knn_cat"],
