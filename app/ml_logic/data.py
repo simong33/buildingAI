@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 from tqdm import tqdm
-from app.params import COLUMNS_TO_KEEP, DUPLICATE_COLUMNS
+from app.params import COLUMNS_TO_KEEP, DUPLICATE_COLUMNS, LOCAL_DATA_PATH
 
 
 def save_dataframe():
@@ -10,22 +10,22 @@ def save_dataframe():
     Save a dataframe in the data folder.
     """
     df = build_dataframe()
-    if not os.path.exists("data"):
-        os.makedirs("data")
-    df.to_csv("data/dpe.csv", index=False)
+    if not os.path.exists(LOCAL_DATA_PATH):
+        os.makedirs(LOCAL_DATA_PATH)
+    df.to_csv(f"{LOCAL_DATA_PATH}/dpe.csv", index=False)
 
 
 def load_dataframe() -> pd.DataFrame:
     """
     Load a dataframe from the data folder.
     """
-    if not os.path.exists("data"):
-        os.makedirs("data")
-    if os.path.exists("data/dpe.csv"):
-        df = pd.read_csv("data/dpe.csv")
+    if not os.path.exists(LOCAL_DATA_PATH):
+        os.makedirs(LOCAL_DATA_PATH)
+    if os.path.exists(f"{LOCAL_DATA_PATH}/dpe.csv"):
+        df = pd.read_csv(f"{LOCAL_DATA_PATH}/dpe.csv")
     else:
         df = build_dataframe()
-        df.to_csv("data/dpe.csv", index=False)
+        df.to_csv(f"{LOCAL_DATA_PATH}/dpe.csv", index=False)
     return df
 
 
