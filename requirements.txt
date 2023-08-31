@@ -5,6 +5,11 @@ numpy
 pandas
 scikit-learn
 tqdm
+colorama
+
+#GOOGLE
+google-cloud-bigquery
+google-cloud-storage
 
 # Geospatial packages
 shapely

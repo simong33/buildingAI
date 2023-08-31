@@ -6,7 +6,15 @@ LOCAL_REGISTRY_PATH = os.path.join(
 )
 BUCKET_NAME = os.environ.get("BUCKET_NAME")
 MODEL_TARGET = "gcs"  # "local" or "gcs"
+DATA_STORAGE = "gbq" #"local" or "gbq"
 BDNB_FILES_URI = "https://open-data.s3.fr-par.scw.cloud/bdnb_millesime_2022-10-d/"
+
+GCP_PROJECT = os.environ.get("GCP_PROJECT")
+GCP_REGION = os.environ.get("GCP_REGION")
+BQ_REGION = os.environ.get("BQ_REGION")
+BQ_DATASET = os.environ.get("BQ_DATASET")
+BQ_RAW_DATA = os.environ.get("BQ_RAW_DATA")
+
 
 DEP_CODES = [69]
 CITY_CODES = [
