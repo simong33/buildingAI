@@ -4,12 +4,12 @@ CITY_CODES = [
     "06088",
     132,  # Marseille arr.
     6938,  # Lyon arr.
-    31555,
-    33063,
-    34172,
-    44109,
-    59350,
-    67482,
+    #31555,
+    # 33063,
+    #34172,
+    #44109,
+    # 59350,
+    # 67482,
     751,  # Paris prefix of arrondissements
 ]
 UNRELEVANT_TABLES = [
@@ -59,30 +59,6 @@ UNRELEVANT_TABLES = [
     "batiment_groupe_dle_reseaux_2020",  # compris dans dle_reseaux_multimillesime
 ]
 
-COLUMNS_TO_KEEP = {
-    "classe_bilan_dpe": [],
-    "annee_construction": ["num", "minmax", "mean_geo"],
-    "mat_mur_txt": ["cat", "oeh", "knn_cat"],
-    "mat_toit_txt": ["cat", "oeh", "knn_cat"],
-    "nb_log": ["num", "RobustScaler", "mean_geo"],
-    "geom_groupe": [
-        "Multypolygon",
-        "",
-        "",
-    ],  # batiment group 70k lignes 1.3%de null sur paris
-    "conso_tot_par_pdl": [
-        "num",
-        "RobustScaler",
-        "",
-    ],  # dle_elec 207653 lignes, Si on garde le max du couple (id, millesime ): 52976 dont 98% sont de 2021
-    "conso_tot": ["num", "RobustScaler", ""],
-    # 'gaz_conso_tot_par_pdl': ['num','RobustScaler',''],#dle_gaz 55178 lignes, Si on garde le max du couple (id, millesime ): 19825 dont 89% sont de 2021
-    # 'gaz_conso_tot': ['num','RobustScaler',''],
-    # 'res_conso_tot_par_pdl': ['num','RobustScaler',''],#dle reseaux 8131 lignes, Si on garde le max du couple (id, millesime ): 4852 dont 99% sont de 2021
-    # 'res_conso_tot': ['num','RobustScaler',''],
-    "hauteur_mean": ["num", "StandartScaler", "mean avec geom_groupe"],
-}
-
 RELEVANT_FILES_ANTONIN= [
     "batiment_groupe_dpe_representatif_logement",
     "batiment_groupe_dpe_statistique_logement",
@@ -96,6 +72,7 @@ COLUMNS_TO_KEEP = {
     "mat_mur_txt": ["cat", "oeh", "knn_cat"],
     "mat_toit_txt": ["cat", "oeh", "knn_cat"],
     "nb_log": ["num", "RobustScaler", "mean_geo"],
+    "l_usage_1":['none',"",""],
     "geom_groupe": [
         "Multypolygon",
         "",
@@ -116,6 +93,7 @@ COLUMNS_TO_KEEP = {
 DUPLICATE_COLUMNS = [
     "contient_fictive_geom_groupe",
     "annee_construction_dpe",
+    "dpe_logement_annee_construction_dpe",
     "l_annee_construction",
     "batiment_groupe_rnc_nb_log",
 ]
