@@ -18,3 +18,9 @@ save_dataframe:
 
 run_api:
 	uvicorn app.api.fast:app
+
+save_model:
+	python -c 'from app.ml_logic.registry import save_model; save_model()'
+
+load_model:
+	python -c 'from app.ml_logic.registry import load_model; load_model()'
