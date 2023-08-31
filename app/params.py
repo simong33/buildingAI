@@ -93,7 +93,6 @@ COLUMNS_TO_KEEP = {
 DUPLICATE_COLUMNS = [
     "contient_fictive_geom_groupe",
     "annee_construction_dpe",
-    "dpe_logement_annee_construction_dpe",
     "l_annee_construction",
     "batiment_groupe_rnc_nb_log",
 ]
