@@ -8,10 +8,31 @@ from sklearn.model_selection import train_test_split
 
 from app.params import *
 
+def isfloat(num):
+    try:
+        float(num)
+        return True
+    except ValueError:
+        return False
+
+def clean_usage(txt:str):
+    if txt is None or isfloat(txt):
+        return False
+    else:
+        for t in [']','[','"']:
+            txt = txt.replace(t,'')
+        usages = txt.strip().split(',')
+        return True if usages[0]=='Résidentiel' or (len(usages)==2 and usages[1]=='Résidentiel') else False
+
 def classic_clean(df:pd.DataFrame,)->pd.DataFrame:
     data = df.copy()
     #On retire les ligne duppliquées
     clean_data = data.drop_duplicates()
+
+    #On retire les lignes qui ne correspondent pas à des données résidentielles
+    #On utilise la colonne de bdtopo l_usage_1
+    selection = clean_data.l_usage_1.map(clean_usage)
+    clean_data=clean_data[selection]
 
     return clean_data
 
@@ -92,10 +113,10 @@ def create_preprocessor(df:pd.DataFrame)->ColumnTransformer:
 
     return final_preprocessor
 
-def preprocess(df: pd.DataFrame, split_ratio:float)-> tuple:
+def preprocess(df: pd.DataFrame, split_ratio:float=0.2)-> tuple:
     """
     Input : dataframe
-    Output : tuple X_train, y_train, X_test, y_test
+    Output : tuple X_train, X_test, y_train, y_test
     Cette fonction produit un dataframe :
     1. nettoyé,
     2. complété des données manquantes,
