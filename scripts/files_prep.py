@@ -8,7 +8,9 @@ def download_and_extract():
     Download and extract the data from the BDNB.
     """
     dep_codes = extract_dep_codes_from_cities()
+
     clean_raw_data()
+
     for dep_code in dep_codes:
         print(f"Downloading data for dep {dep_code}")
         url = craft_download_url(dep_code)
