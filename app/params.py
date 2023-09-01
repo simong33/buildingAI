@@ -100,6 +100,7 @@ COLUMNS_TO_KEEP = {
     # 'res_conso_tot_par_pdl': ['num','RobustScaler',''],#dle reseaux 8131 lignes, Si on garde le max du couple (id, millesime ): 4852 dont 99% sont de 2021
     # 'res_conso_tot': ['num','RobustScaler',''],
     "hauteur_mean": ["num", "StandartScaler", "mean avec geom_groupe"],
+    "volume_mean" :["num", "StandartScaler", "mean"]
 }
 DUPLICATE_COLUMNS = [
     "contient_fictive_geom_groupe",
