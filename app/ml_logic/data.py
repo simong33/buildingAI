@@ -3,17 +3,18 @@ import numpy as np
 import os
 from tqdm import tqdm
 from app.params import COLUMNS_TO_KEEP, DUPLICATE_COLUMNS, LOCAL_DATA_PATH
-
+from app.ml_logic.features import add_features
 
 def save_dataframe():
     """
     Save a dataframe in the data folder.
     """
     df = build_dataframe()
+    breakpoint()
     if not os.path.exists(LOCAL_DATA_PATH):
         os.makedirs(LOCAL_DATA_PATH)
     df.to_csv(f"{LOCAL_DATA_PATH}/dpe.csv", index=False)
-
+    breakpoint()
 
 def load_dataframe() -> pd.DataFrame:
     """
@@ -73,8 +74,11 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
     df = rename_columns(df)
     df = remove_duplicate_headers(df)
     df = force_types(df)
+
+    df=add_features(df)
     df = drop_rows_without_target(df)
     print(f"FINAL Shape of the dataframe: {df.shape}")
+    breakpoint()
     return df
 
 
