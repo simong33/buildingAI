@@ -75,7 +75,7 @@ COLUMNS_TO_KEEP = {
     "mat_mur_txt": ["cat", "oeh", "knn_cat"],
     "mat_toit_txt": ["cat", "oeh", "knn_cat"],
     "nb_log": ["num", "RobustScaler", "mean_geo"],
-    "l_usage_1":['none',"",""],
+    "l_usage_1": ["none", "", ""],
     "geom_groupe": [
         "Multypolygon",
         "",
