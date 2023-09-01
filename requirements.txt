@@ -1,4 +1,6 @@
 pytest
+pytest-asyncio
+httpx
 pylint
 ipdb
 numpy
@@ -27,3 +29,10 @@ matplotlib
 # API
 fastapi
 uvicorn
+
+# GCP
+google-cloud-bigquery
+google-cloud-storage
+
+# Setup
+setuptools
