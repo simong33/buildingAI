@@ -10,11 +10,9 @@ def save_dataframe():
     Save a dataframe in the data folder.
     """
     df = build_dataframe()
-    breakpoint()
     if not os.path.exists(LOCAL_DATA_PATH):
         os.makedirs(LOCAL_DATA_PATH)
     df.to_csv(f"{LOCAL_DATA_PATH}/dpe.csv", index=False)
-    breakpoint()
 
 def load_dataframe() -> pd.DataFrame:
     """
@@ -78,7 +76,6 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
     df=add_features(df)
     df = drop_rows_without_target(df)
     print(f"FINAL Shape of the dataframe: {df.shape}")
-    breakpoint()
     return df
 
 
@@ -214,3 +211,12 @@ def force_types(df) -> pd.DataFrame:
         "elec_conso_tot_par_pdl": float,
     }
     return df.astype(dict_type)
+
+def save_frame(name):
+    """
+    Save a dataframe in the data folder.
+    """
+    if not os.path.exists(LOCAL_DATA_PATH):
+        os.makedirs(LOCAL_DATA_PATH)
+    df.to_csv(f"{LOCAL_DATA_PATH}/{name}.csv", index=False)
+    breakpoint()
