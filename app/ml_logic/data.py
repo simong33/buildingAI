@@ -4,27 +4,101 @@ import os
 from tqdm import tqdm
 from app.params import COLUMNS_TO_KEEP, DUPLICATE_COLUMNS, LOCAL_DATA_PATH
 from app.ml_logic.features import add_features
+from colorama import Fore, Style
+from google.cloud import bigquery
 
-def save_dataframe():
+
+def load_data_to_bq(
+    data: pd.DataFrame,
+    gcp_project: str,
+    bq_dataset: str,
+    table: str,
+    truncate: bool = True,
+) -> None:
+    """
+    - Save the DataFrame to BigQuery
+    - Empty the table beforehand if `truncate` is True, append otherwise
+    """
+
+    assert isinstance(data, pd.DataFrame)
+    full_table_name = f"{gcp_project}.{bq_dataset}.{table}"
+    print(
+        Fore.BLUE + f"\nSave data to BigQuery @ {full_table_name}...:" + Style.RESET_ALL
+    )
+
+    # Load data onto full_table_name
+
+    client = bigquery.Client()
+
+    # Define write mode and schema
+    write_mode = "WRITE_TRUNCATE" if truncate else "WRITE_APPEND"
+    job_config = bigquery.LoadJobConfig(write_disposition=write_mode)
+
+    print(
+        f"\n{'Write' if truncate else 'Append'} {full_table_name} ({data.shape[0]} rows)"
+    )
+
+    # Load data
+    job = client.load_table_from_dataframe(data, full_table_name, job_config=job_config)
+    result = job.result()  # wait for the job to complete
+
+    print(f"✅ Data saved to bigquery, with shape {data.shape}")
+
+
+def save_dataframe(dest: str = DATA_STORAGE):
     """
     Save a dataframe in the data folder.
+    Depending on destination param (dest) dataframe is stored:
+    - local -> Locally
+    - cloud -> GCLOUD
     """
     df = build_dataframe()
-    if not os.path.exists(LOCAL_DATA_PATH):
-        os.makedirs(LOCAL_DATA_PATH)
-    df.to_csv(f"{LOCAL_DATA_PATH}/dpe.csv", index=False)
-
-def load_dataframe() -> pd.DataFrame:
-    """
-    Load a dataframe from the data folder.
-    """
-    if not os.path.exists(LOCAL_DATA_PATH):
-        os.makedirs(LOCAL_DATA_PATH)
-    if os.path.exists(f"{LOCAL_DATA_PATH}/dpe.csv"):
-        df = pd.read_csv(f"{LOCAL_DATA_PATH}/dpe.csv")
-    else:
-        df = build_dataframe()
+    if dest == "local":
+        if not os.path.exists(LOCAL_DATA_PATH):
+            os.makedirs(LOCAL_DATA_PATH)
         df.to_csv(f"{LOCAL_DATA_PATH}/dpe.csv", index=False)
+
+    else:
+        load_data_to_bq(
+            data=df, gcp_project=GCP_PROJECT, bq_dataset=BQ_DATASET, table=BQ_RAW_DATA
+        )
+
+
+def load_dataframe(dest=DATA_STORAGE) -> pd.DataFrame:
+    """
+    Load a dataframe from the data folder or Google Bigquery
+    """
+    if dest == "local":
+        if not os.path.exists(LOCAL_DATA_PATH):
+            os.makedirs(LOCAL_DATA_PATH)
+        if os.path.exists(f"{LOCAL_DATA_PATH}/dpe.csv"):
+            df = pd.read_csv(f"{LOCAL_DATA_PATH}/dpe.csv")
+        else:
+            df = build_dataframe()
+            df.to_csv(f"{LOCAL_DATA_PATH}/dpe.csv", index=False)
+    else:
+        print(Fore.BLUE + "\nLoad data from BigQuery server..." + Style.RESET_ALL)
+
+        query = f"""
+        SELECT *
+        FROM {GCP_PROJECT}.{BQ_DATASET}.{BQ_RAW_DATA}
+        """
+
+        client = bigquery.Client(project=GCP_PROJECT)
+        query_job = client.query(query)
+        result = query_job.result()
+        df = result.to_dataframe()
+
+        # Store as CSV if the BQ query returned at least one valid line
+        if df.shape[0] < 1:
+            print(f"⚠️ no stored data in bigquery")
+            df = save_dataframe()
+            query_job = client.query(query)
+            result = query_job.result()
+            df = result.to_dataframe()
+
+    print(f"✅ Data loaded, with shape {df.shape}")
+
     return df
 
 
@@ -32,7 +106,9 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
     """
     Build a dataframe from the CSV files in raw_data/csv.
     """
+
     df = pd.read_csv(f"{path}/batiment_groupe.csv", sep=",")
+
     df = df.drop_duplicates()
     initial_number_of_rows = df.shape[0]
     for dirpath, dirnames, filenames in os.walk(path):
@@ -73,8 +149,9 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
     df = remove_duplicate_headers(df)
     df = force_types(df)
 
-    df=add_features(df)
+    df = add_features(df)
     df = drop_rows_without_target(df)
+
     print(f"FINAL Shape of the dataframe: {df.shape}")
     return df
 
@@ -211,6 +288,7 @@ def force_types(df) -> pd.DataFrame:
         "elec_conso_tot_par_pdl": float,
     }
     return df.astype(dict_type)
+
 
 def save_frame(name):
     """
