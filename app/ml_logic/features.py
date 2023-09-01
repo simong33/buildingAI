@@ -99,11 +99,13 @@ def est_mitoyen(newdf=None) :  # liste de couple mitoyen
 
   return mitoyennete
 
+
 def convert_prof_geo(polygone_prog) : #polygone geo
   transformer = Transformer.from_crs("epsg:2154", "epsg:4326", always_xy=True)
   batiments = polygone_prog
   newbat = ops.transform(transformer.transform, batiments)
   return newbat
+
 
 def calculate_side_lengths_multipolygon(multipolygon):
     # Liste pour stocker les tailles de côtés de tous les bâtiments
@@ -128,6 +130,7 @@ def calculate_side_lengths_multipolygon(multipolygon):
 
     return all_side_lengths
 
+
 def calculate_side_lengths_polygon(polygon):
     # Coordonnées du Polygon
     coordinates = list(polygon.exterior.coords)
@@ -145,25 +148,24 @@ def calculate_side_lengths_polygon(polygon):
     return side_lengths
 
 def intersect_batiment(bat1,bat2) : #retourne la taille du mur mitoyen entre bat1 et bat2
-  intersection = bat1.intersection(bat2)
-  if intersection.__geo_interface__['type'] == 'Polygon' :
-    taille = max(calculate_side_lengths_polygon(intersection))
-  elif intersection.__geo_interface__['type'] == 'MultiPolygon' :
-    tab_taille = calculate_side_lengths_multipolygon(intersection)
-    max_values=[]
-    for sublist in tab_taille:
-        max_value = max(sublist)  # Trouver le maximum dans la liste actuelle
-        max_values.append(max_value)
-    taille = sum(max_values)
-  elif intersection.__geo_interface__['type'] =='LineString' :
-    taille = intersection.length
-  elif  intersection.__geo_interface__['type'] =='MultiLineString' :
-    total_length = sum(line.length for line in intersection.geoms)
-
-    taille = total_length
-  else :
-    taille = 0
-  return taille
+    intersection = bat1.intersection(bat2)
+    if intersection.__geo_interface__['type'] == 'Polygon' :
+        taille = max(calculate_side_lengths_polygon(intersection))
+    elif intersection.__geo_interface__['type'] == 'MultiPolygon' :
+        tab_taille = calculate_side_lengths_multipolygon(intersection)
+        max_values=[]
+        for sublist in tab_taille:
+            max_value = max(sublist)  # Trouver le maximum dans la liste actuelle
+            max_values.append(max_value)
+        taille = sum(max_values)
+    elif intersection.__geo_interface__['type'] =='LineString' :
+        taille = intersection.length
+    elif  intersection.__geo_interface__['type'] =='MultiLineString' :
+        total_length = sum(line.length for line in intersection.geoms)
+        taille = total_length
+    else :
+        taille = 0
+    return taille
 
 def surface_tour_batiment(bat1,hauteur) :  #retourne la surface du tour du batiment
   cotes = calculate_side_lengths_multipolygon(bat1)
