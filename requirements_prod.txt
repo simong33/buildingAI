@@ -1,0 +1,19 @@
+numpy
+pandas
+scikit-learn
+tqdm
+
+# Geospatial packages
+shapely
+pyproj
+
+# API
+fastapi
+uvicorn
+
+# GCP
+google-cloud-bigquery
+google-cloud-storage
+
+# Setup
+setuptools
