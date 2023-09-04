@@ -2,6 +2,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from app.ml_logic.preprocess import preprocess
 from app.params import LOCAL_DATA_PATH
 import pandas as pd
+from lightgbm import LGBMClassifier
+
 
 
 def build_model():
@@ -19,7 +21,8 @@ def initialize_model():
     """
     Initialize model.
     """
-    model = KNeighborsClassifier()
+    model = LGBMClassifier()
+
     return model
 
 
