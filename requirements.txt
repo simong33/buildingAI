@@ -8,7 +8,7 @@ pandas
 scikit-learn
 tqdm
 colorama
-geojson
+lightgbm
 
 #GOOGLE
 google-cloud-bigquery
