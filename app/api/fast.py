@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.ml_logic.preprocess import preprocess
 
-# from app.ml_logic.registry import load_model
+from app.ml_logic.registry import load_model
 
 app = FastAPI()
 
@@ -16,12 +16,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.state.model = load_model()
+
 
 @app.get("/predict")
 def predict():
     """
     Predict class of a building.
     """
+    model = app.state.model
     # X_pred
     # X_pred_preproc = preprocess(X_pred)
     try:
