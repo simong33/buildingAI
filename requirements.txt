@@ -8,7 +8,7 @@ pandas
 scikit-learn
 tqdm
 colorama
-geojson
+lightgbm
 
 #GOOGLE
 google-cloud-bigquery
@@ -19,6 +19,7 @@ db-dtypes
 # Geospatial packages
 shapely
 pyproj
+geojson
 
 # Explo
 jupyterlab
