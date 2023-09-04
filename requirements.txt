@@ -19,6 +19,7 @@ db-dtypes
 # Geospatial packages
 shapely
 pyproj
+geojson
 
 # Explo
 jupyterlab
