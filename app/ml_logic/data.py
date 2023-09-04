@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 from tqdm import tqdm
-from app.params import COLUMNS_TO_KEEP, DUPLICATE_COLUMNS, LOCAL_DATA_PATH
+from app.params import COLUMNS_TO_KEEP, DUPLICATE_COLUMNS, LOCAL_DATA_PATH, DATA_STORAGE
 from app.ml_logic.features import add_features
 from colorama import Fore, Style
 from google.cloud import bigquery
@@ -156,6 +156,23 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
     return df
 
 
+def get_building_df(building_id: str) -> pd.DataFrame:
+    """
+    Get a dataframe for a specific building from BQ.
+    """
+    table_name = get_full_table_name()
+    query = f"""
+        SELECT *
+        FROM {table_name}
+        WHERE batiment_groupe_id = '{building_id}'
+        LIMIT 1
+    """
+    client = bigquery.Client(project=os.environ["GCP_PROJECT"])
+    query_job = client.query(query)
+    result = query_job.result()
+    return result.to_dataframe()
+
+
 def drop_unrelevant_columns(df=None) -> pd.DataFrame:
     """
     Drop columns that are not relevant for the analysis.
@@ -296,5 +313,14 @@ def save_frame(name):
     """
     if not os.path.exists(LOCAL_DATA_PATH):
         os.makedirs(LOCAL_DATA_PATH)
-    df.to_csv(f"{LOCAL_DATA_PATH}/{name}.csv", index=False)
-    breakpoint()
+    # df.to_csv(f"{LOCAL_DATA_PATH}/{name}.csv", index=False)
+
+
+def get_full_table_name() -> str:
+    """
+    Get the name of the BQ table.
+    """
+    gcp_project = os.environ.get("GCP_PROJECT")
+    bq_dataset = os.environ.get("BQ_DATASET")
+    table = os.environ.get("BQ_RAW_DATA")
+    return f"{gcp_project}.{bq_dataset}.{table}"
