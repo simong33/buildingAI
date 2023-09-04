@@ -1,8 +1,18 @@
+httpx
+pylint
+ipdb
 numpy
 pandas
 scikit-learn
 tqdm
+colorama
 lightgbm
+
+#GOOGLE
+google-cloud-bigquery
+google-cloud-storage
+pyarrow
+db-dtypes
 
 # Geospatial packages
 shapely

@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 from tqdm import tqdm
-from app.params import COLUMNS_TO_KEEP, DUPLICATE_COLUMNS, LOCAL_DATA_PATH, DATA_STORAGE
+from app.params import *
 from app.ml_logic.features import add_features
 from colorama import Fore, Style
 from google.cloud import bigquery
@@ -170,7 +170,9 @@ def get_building_df(building_id: str) -> pd.DataFrame:
     client = bigquery.Client(project=os.environ["GCP_PROJECT"])
     query_job = client.query(query)
     result = query_job.result()
-    return result.to_dataframe()
+    df = result.to_dataframe()
+    df = make_residential(df)
+    return df
 
 
 def drop_unrelevant_columns(df=None) -> pd.DataFrame:
@@ -324,3 +326,12 @@ def get_full_table_name() -> str:
     bq_dataset = os.environ.get("BQ_DATASET")
     table = os.environ.get("BQ_RAW_DATA")
     return f"{gcp_project}.{bq_dataset}.{table}"
+
+
+def make_residential(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Faking a residential building type for buildings.
+    For demo purposes only.
+    """
+    df["l_usage_1"] = "Résidentiel"
+    return df
