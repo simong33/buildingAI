@@ -21,6 +21,9 @@ save_dataframe:
 run_api:
 	uvicorn app.api.fast:app
 
+get_building_data:
+	python -c "from app.ml_logic.data import get_building_df; get_building_df('$(id)')"
+
 save_model:
 	python -c 'from app.ml_logic.registry import save_model; save_model()'
 
