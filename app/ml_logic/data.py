@@ -60,7 +60,10 @@ def save_dataframe(dest: str = DATA_STORAGE):
 
     else:
         load_data_to_bq(
-            data=df, gcp_project=GCP_PROJECT, bq_dataset=BQ_DATASET, table=BQ_RAW_DATA
+            data=df,
+            gcp_project=GCP_PROJECT,
+            bq_dataset=BQ_DATASET,
+            table=BQ_RAW_DATA_FULL,
         )
 
 
@@ -102,7 +105,7 @@ def load_dataframe(dest=DATA_STORAGE) -> pd.DataFrame:
     return df
 
 
-def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
+def build_dataframe(path=LOCAL_DATA_PATH) -> pd.DataFrame:
     """
     Build a dataframe from the CSV files in raw_data/csv.
     """
@@ -150,7 +153,7 @@ def build_dataframe(path="raw_data/csv") -> pd.DataFrame:
     df = force_types(df)
 
     df = add_features(df)
-    df = drop_rows_without_target(df)
+    # df = drop_rows_without_target(df)
 
     print(f"FINAL Shape of the dataframe: {df.shape}")
     return df
@@ -160,7 +163,7 @@ def get_building_df(building_id: str) -> pd.DataFrame:
     """
     Get a dataframe for a specific building from BQ.
     """
-    table_name = get_full_table_name()
+    table_name = get_full_table_name(table=BQ_RAW_DATA_FULL)
     query = f"""
         SELECT *
         FROM {table_name}
@@ -318,13 +321,12 @@ def save_frame(name):
     # df.to_csv(f"{LOCAL_DATA_PATH}/{name}.csv", index=False)
 
 
-def get_full_table_name() -> str:
+def get_full_table_name(table=os.environ.get("BQ_RAW_DATA")) -> str:
     """
     Get the name of the BQ table.
     """
     gcp_project = os.environ.get("GCP_PROJECT")
     bq_dataset = os.environ.get("BQ_DATASET")
-    table = os.environ.get("BQ_RAW_DATA")
     return f"{gcp_project}.{bq_dataset}.{table}"
 
 

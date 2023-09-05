@@ -71,6 +71,8 @@ def merge_csv_files(dep_codes=DEP_CODES):
             f"cat raw_data/*/csv/{file_name} | awk 'FNR==1 && NR!=1 {{next}} {{print}}' > raw_data/csv/{file_name}"
         )
 
+    os.system(f"mv raw_data/csv/* {LOCAL_DATA_PATH}")
+
 
 def remove_unrelevant_tables(table_names=UNRELEVANT_TABLES, dep_code: int = 75):
     """
@@ -119,7 +121,7 @@ def clean_raw_data():
     os.system("rm -r raw_data/*")
 
 
-def get_csv_size(path="raw_data/csv"):
+def get_csv_size(path=LOCAL_DATA_PATH):
     """
     Print the total size of the files in the given path.
     """

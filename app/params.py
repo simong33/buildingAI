@@ -20,6 +20,7 @@ GCP_REGION = os.environ.get("GCP_REGION")
 BQ_REGION = os.environ.get("BQ_REGION")
 BQ_DATASET = os.environ.get("BQ_DATASET")
 BQ_RAW_DATA = os.environ.get("BQ_RAW_DATA")
+BQ_RAW_DATA_FULL = os.environ.get("BQ_RAW_DATA_FULL")
 
 
 DEP_CODES = [69]

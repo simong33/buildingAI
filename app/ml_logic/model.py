@@ -1,7 +1,6 @@
 from sklearn.neighbors import KNeighborsClassifier
 from app.ml_logic.preprocess import preprocess
 from app.ml_logic.data import load_dataframe
-from app.params import LOCAL_DATA_PATH
 import pandas as pd
 from lightgbm import LGBMClassifier
 
