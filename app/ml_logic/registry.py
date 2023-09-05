@@ -1,6 +1,6 @@
 from app.params import MODEL_TARGET, LOCAL_REGISTRY_PATH, LOCAL_DATA_PATH
 from google.cloud import storage
-from app.params import BUCKET_NAME
+from app.params import BUCKET_NAME, LOCAL_PREPROC_PATH
 from colorama import Fore, Style
 import pickle
 import time
@@ -8,6 +8,7 @@ import os
 import glob
 
 from app.ml_logic.model import build_model
+from sklearn.compose import ColumnTransformer
 
 
 def save_model(model=None) -> None:

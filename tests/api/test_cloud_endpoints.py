@@ -4,7 +4,7 @@ import os
 
 SERVICE_URL = os.environ.get("SERVICE_URL")
 
-test_params = {}
+test_params = {"building_id": "06088000KV0299_e9b23069610540f"}
 
 
 @pytest.mark.asyncio

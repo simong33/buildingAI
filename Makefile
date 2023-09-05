@@ -19,7 +19,7 @@ save_dataframe:
 	python -c 'from app.ml_logic.data import save_dataframe; save_dataframe()'
 
 run_api:
-	uvicorn app.api.fast:app
+	uvicorn app.api.fast:app --reload
 
 get_building_data:
 	python -c "from app.ml_logic.data import get_building_df; get_building_df('$(id)')"
@@ -29,6 +29,9 @@ save_model:
 
 load_model:
 	python -c 'from app.ml_logic.registry import load_model; load_model()'
+
+save_preproc:
+	python -c 'from app.ml_logic.preprocess import save_one_preproc; save_one_preproc()'
 
 reset_local_files:
 	rm -rf ${ML_DIR}

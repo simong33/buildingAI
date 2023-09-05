@@ -1,12 +1,18 @@
 import os
 
 LOCAL_DATA_PATH = os.path.join(os.path.expanduser("~"), ".lewagon", "mlops", "data")
+LOCAL_PREPROC_PATH = os.path.join(
+    os.path.expanduser("~"), ".lewagon", "mlops", "preproc"
+)
+LOCAL_ENCODERS_PATH = os.path.join(
+    os.path.expanduser("~"), ".lewagon", "mlops", "encoders"
+)
 LOCAL_REGISTRY_PATH = os.path.join(
     os.path.expanduser("~"), ".lewagon", "mlops", "training_outputs"
 )
 BUCKET_NAME = os.environ.get("BUCKET_NAME")
 MODEL_TARGET = "gcs"  # "local" or "gcs"
-DATA_STORAGE = "gbq" #"local" or "gbq"
+DATA_STORAGE = "gbq"  # "local" or "gbq"
 BDNB_FILES_URI = "https://open-data.s3.fr-par.scw.cloud/bdnb_millesime_2022-10-d/"
 
 GCP_PROJECT = os.environ.get("GCP_PROJECT")
@@ -100,7 +106,7 @@ COLUMNS_TO_KEEP = {
     # 'res_conso_tot_par_pdl': ['num','RobustScaler',''],#dle reseaux 8131 lignes, Si on garde le max du couple (id, millesime ): 4852 dont 99% sont de 2021
     # 'res_conso_tot': ['num','RobustScaler',''],
     "hauteur_mean": ["num", "StandartScaler", "mean avec geom_groupe"],
-    "volume_mean" :["num", "StandartScaler", "mean"]
+    "volume_mean": ["num", "StandartScaler", "mean"],
 }
 DUPLICATE_COLUMNS = [
     "contient_fictive_geom_groupe",

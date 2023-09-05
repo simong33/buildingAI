@@ -2,9 +2,10 @@ import pandas as pd
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.ml_logic.preprocess import preprocess
+from app.ml_logic.preprocess import preprocess, load_encoder
 
-# from app.ml_logic.registry import load_model
+from app.ml_logic.registry import load_model
+from app.ml_logic.data import get_building_df
 
 app = FastAPI()
 
@@ -16,19 +17,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.state.model = load_model()
+
 
 @app.get("/predict")
-def predict():
+def predict(
+    building_id: str,
+):
     """
     Predict class of a building.
     """
-    # X_pred
-    # X_pred_preproc = preprocess(X_pred)
+    model = app.state.model
     try:
-        # y_pred = app.state.model.predict(X_pred_preproc)
-        # y_pred_to_dict = y_pred.tolist()
-        y_pred = "F"
-        return {"classe": y_pred}
+        X_pred = get_building_df(building_id)
+        X_pred_preproc = preprocess(X_pred, 0.2, True)
+        y_pred = model.predict(X_pred_preproc)
+        le = load_encoder()
+        pred = y_pred.tolist()[0]
+        letter = le.inverse_transform([pred])[0]
+        return {"classe": letter}
     except Exception as e:
         print(e)
         return {"prediction": "error", "error": e}
